@@ -1,0 +1,64 @@
+#:kivy 2.0.0
+
+<Parent>
+    orientation: 'vertical'
+    BoxLayout:
+        size_hint_y: 0.1
+        orientation: 'horizontal'
+        Label:
+            id: logo
+            text: "John's Pizzaria"
+            text_size: self.size
+            padding: (10, 10)
+            font_size: 30
+        Label:
+            size_hint_x: 0.7
+        Button:
+            size_hint_y: 0.5
+            size_hint_x: 0.15
+            text: 'Login'
+            font_size: 16
+        Button:
+            size_hint_y: 0.5
+            size_hint_x: 0.15
+            size_hint_x: 0.15
+            text: 'Signup'
+            font_size: 16
+        Button:
+            size_hint_y: 0.5
+            size_hint_x: 0.15
+            size_hint_x: 0.15
+            text: 'Cart'
+            font_size: 16
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            size_hint_y: 0.9
+            source: 'assets/home_1_croped.png'
+            allow_stretch: True
+            keep_ratio: False
+        Label:
+            size_hint_y: 0.15
+            id: mode_selection_text
+            text: 'Please select a delivery or pickup'
+            font_size: 20
+        BoxLayout:
+            orientation: 'horizontal'
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: 0.1
+                    text: 'Deliver'
+                    font_size: 16
+                Image:
+                    size_hint_y: 0.9
+                    source: 'assets/delivery.png'
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: 0.1
+                    text: 'Pickup'
+                    font_size: 16
+                Image:
+                    size_hint_y: 0.9
+                    source: 'assets/pickup.png'
