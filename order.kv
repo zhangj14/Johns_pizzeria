@@ -1,64 +1,163 @@
 #:kivy 2.0.0
+#: import StringProperty kivy.properties.StringProperty
+MyScreenManager:
+    HomeScreen:
+    MenuScreen:
+    CheckoutScreen:
+    AccountScreen:
 
-<Parent>
+<ImageButton@ButtonBehavior+Image>:
+    allow_stretch: True
+    keep_ratio: True
+
+<HeaderButton@Button>:
+    size_hint_x: 1
+    font_size: 18
+
+<Header@BoxLayout>:
+    orientation: 'horizontal'
+    size_hint_y: 1
+    Label:
+        size_hint_x: 2.5
+        text_size: self.size
+        text: "John's Pizzeria"
+        font_size: 30
+        halign: 'left'
+    Label:
+        size_hint_x: 4
+    HeaderButton:
+        text: 'Cart'
+    HeaderButton:
+        text: 'Login'
+    HeaderButton:
+        text: 'Signup'
+
+<ModeSelection@BoxLayout>:
     orientation: 'vertical'
-    BoxLayout:
-        size_hint_y: 0.1
-        orientation: 'horizontal'
-        Label:
-            id: logo
-            text: "John's Pizzaria"
-            text_size: self.size
-            padding: (10, 10)
-            font_size: 30
-        Label:
-            size_hint_x: 0.7
-        Button:
-            size_hint_y: 0.5
-            size_hint_x: 0.15
-            text: 'Login'
-            font_size: 16
-        Button:
-            size_hint_y: 0.5
-            size_hint_x: 0.15
-            size_hint_x: 0.15
-            text: 'Signup'
-            font_size: 16
-        Button:
-            size_hint_y: 0.5
-            size_hint_x: 0.15
-            size_hint_x: 0.15
-            text: 'Cart'
-            font_size: 16
+    mode: ''
+    source: None
+    Button:
+        size_hint_y: 1
+        text: root.mode
+        font_size: 18
+        on_release: app.root.home_to_menu(root.mode)
+    ImageButton:
+        size_hint_y: 5
+        allow_stretch: True
+        keep_ratio: True
+        source: root.source
+        on_release: app.root.home_to_menu(root.mode)
+
+<HomeScreen>:
+    name: 'homescreen'
     BoxLayout:
         orientation: 'vertical'
+        Header:
         Image:
-            size_hint_y: 0.9
-            source: 'assets/home_1_croped.png'
+            size_hint_y: 5
             allow_stretch: True
             keep_ratio: False
+            source: 'assets/home_1_croped.png'
         Label:
-            size_hint_y: 0.15
-            id: mode_selection_text
-            text: 'Please select a delivery or pickup'
-            font_size: 20
+            text: 'Start ordering by chooosing one of the following'
+            font_size: 18
         BoxLayout:
             orientation: 'horizontal'
-            BoxLayout:
-                orientation: 'vertical'
-                Label:
-                    size_hint_y: 0.1
-                    text: 'Deliver'
-                    font_size: 16
-                Image:
-                    size_hint_y: 0.9
-                    source: 'assets/delivery.png'
-            BoxLayout:
-                orientation: 'vertical'
-                Label:
-                    size_hint_y: 0.1
-                    text: 'Pickup'
-                    font_size: 16
-                Image:
-                    size_hint_y: 0.9
-                    source: 'assets/pickup.png'
+            size_hint_y: 6
+            ModeSelection:
+                mode: 'Delivery'
+                source: 'assets/Delivery.png'
+            ModeSelection:
+                mode: 'Pickup'
+                source: 'assets/Pickup.png'
+
+<ItemText@Label>:
+    size_hint_x: 1
+    font_size: 16
+
+<ItemImage@Image>:
+    size_hint_x: 5
+    allow_stretch: True
+    keep_ratio: True
+
+<MenuWidget@BoxLayout>:
+    orientation: 'vertical'
+    itemname: ''
+    itemsource: None
+    Label:
+        size_hint_y: 1
+        font_size: 16
+        text: root.itemname
+    Image:
+        size_hint_y: 5
+        allow_stretch: True
+        keep_ratio: True
+        source: root.itemsource
+    TextInput:
+        id: root.itemname
+        size_hint_y: 0.8
+        font_size: 16
+        text: '1 ~ 10'
+#     MenuDropDown:
+# <DropDownButton@Button>:
+#     size_hint_y: None
+#     height: 20
+#     font_size: 16
+#     on_release: app.root.add_item(self.itemname, self.text)
+# <MenuDropDown@DropDown>:
+#     size_hint_y: None
+#     DropDownButton:
+#         text: '1'
+#     DropDownButton:
+#         text: '2'
+#     DropDownButton:
+#         text: '3'
+#     DropDownButton:
+#         text: '4'
+#     DropDownButton:
+#         text: '5'
+#     DropDownButton:
+#         text: '6'
+#     DropDownButton:
+#         text: '7'
+#     DropDownButton:
+#         text: '8'
+#     DropDownButton:
+#         text: '9'
+#     DropDownButton:
+#         text: '10'
+#     DropDownButton:
+#         text: '1'
+
+<MenuScreen>:
+    name: 'menuscreen'
+    # Vegetarian: 'Vegetarian'
+    # Pepperoni: Pepperoni
+    # Cheesy_garlic: Cheesy Garlic
+    BoxLayout:
+        orientation: 'vertical'
+        Header:
+        GridLayout:
+            size_hint_y: 11
+            cols: 3
+            MenuWidget:
+                itemname: 'Pepperoni'
+                itemsource: 'assets/pepperoni.png'
+            MenuWidget:
+                itemname: 'Cheesy Garlic'
+                itemsource: 'assets/cheesygarlic.png'
+            MenuWidget:
+                itemname: 'Mushroom'
+                itemsource: 'assets/mushroom.png'
+            MenuWidget:
+                itemname: 'Beef and Tomato'
+                itemsource: 'assets/beeftomato.png'
+            MenuWidget:
+                itemname: 'Supreme'
+                itemsource: 'assets/supreme.png'
+            MenuWidget:
+                itemname: 'Vegetarian'
+                itemsource: 'assets/vegetarian.png'
+        Button:
+            text: '>>>Go to checkout>>>'
+            on_release: app.root.menu_to_checkout()
