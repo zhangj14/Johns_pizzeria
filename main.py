@@ -7,6 +7,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.dropdown import DropDown
+from kivy.uix.textinput import TextInput
 from kivy.properties import (
     NumericProperty, 
     ReferenceListProperty, 
@@ -14,6 +15,7 @@ from kivy.properties import (
 )
 from kivy.core.window import Window
 
+import re
 
 class Parent(BoxLayout):
     pass
@@ -25,6 +27,10 @@ class HomeScreen(Screen):
     pass
 
 class MenuDropDown(DropDown):
+    pass
+
+
+class MenuWidget(BoxLayout):
     pass
 
 class MenuScreen(Screen):
@@ -57,23 +63,10 @@ class MyScreenManager(ScreenManager):
         self.current = 'menuscreen'
         self.mode = mode
     def menu_to_checkout(self):
-        # for item in self.menu.keys():
-        #     try:
-        #         self.add_item(item)
-        #     except TypeError:
-        #         pass
-        # print(self.order)
-        # self.current = 'checkoutscreen'
-        return
-    def home_to_menu(self, mode):
-        self.current = 'menuscreen'
-        self.mode = mode
-    def home_to_menu(self, mode):
-        self.current = 'menuscreen'
-        self.mode = mode
-        print(self.mode)
-    def add_item(self, name):
-        self.order[name] = (self.ids[name], self.ids[name] * self.menu[name][0])
+        print(self.order)
+        self.current = 'checkoutscreen'
+    def add_item(self, name, quantity):
+        self.order[name] = (quantity, quantity * self.menu[name][0])
     pass
 
 class OrderApp(App):

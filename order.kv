@@ -96,8 +96,9 @@ MyScreenManager:
     TextInput:
         id: root.itemname
         size_hint_y: 0.8
-        font_size: 16
-        text: '1 ~ 10'
+        font_size: 14
+        input_filter: 'int'
+        on_text: app.root.add_item(root.itemname, int(self.text))
 #     MenuDropDown:
 # <DropDownButton@Button>:
 #     size_hint_y: None
@@ -161,3 +162,10 @@ MyScreenManager:
         Button:
             text: '>>>Go to checkout>>>'
             on_release: app.root.menu_to_checkout()
+
+<CheckoutScreen>:
+    name: 'checkoutscreen'
+    BoxLayout:
+        orientation: 'vertical'
+        header: 
+        
