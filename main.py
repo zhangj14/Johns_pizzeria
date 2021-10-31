@@ -16,8 +16,6 @@ from kivy.properties import (
 )
 from kivy.core.window import Window
 
-import re
-
 class Parent(BoxLayout):
     pass
 
@@ -29,7 +27,6 @@ class HomeScreen(Screen):
 
 class MenuDropDown(DropDown):
     pass
-
 
 class MenuWidget(BoxLayout):
     pass
@@ -49,7 +46,6 @@ class CheckoutLabel(Label):
 
 class AccountScreen(Screen):
     pass
-
 
 class MyScreenManager(ScreenManager):
     mode = ''
@@ -89,6 +85,7 @@ class MyScreenManager(ScreenManager):
 class OrderApp(App):
     root_widget = Builder.load_file('order.kv')
     def build(self):
+        Window.clearcolor = (0.98, 0.93, 0.93, 1)
         return self.root_widget
 
 if __name__ == '__main__':

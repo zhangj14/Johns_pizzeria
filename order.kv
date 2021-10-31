@@ -6,7 +6,20 @@ MyScreenManager:
     CheckoutScreen:
     AccountScreen:
 
+<Button>:
+    background_normal: ''
+    background_down: ''
+    background_color: '#fbb448'
+    color: '#cc3d0b'
+    canvas.before:
+        Color:
+            rgba: 243/255, 103/255, 13/255, 1
+        Line:
+            width: 2
+            rectangle: self.x, self.y, self.width, self.height
 
+<Label>:
+    color: '#cc3d0b'
 
 <ImageButton@ButtonBehavior+Image>:
     allow_stretch: True
@@ -17,6 +30,12 @@ MyScreenManager:
     font_size: 18
 
 <Header@BoxLayout>:
+    canvas.before:
+        Color:
+            rgba: 243/255, 103/255, 13/255, 1
+        Line:
+            width: 1
+            points: (self.x, self.y, self.x+self.width, self.y)
     orientation: 'horizontal'
     size_hint_y: 1
     Label:
