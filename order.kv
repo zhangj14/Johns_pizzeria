@@ -6,6 +6,8 @@ MyScreenManager:
     CheckoutScreen:
     AccountScreen:
 
+
+
 <ImageButton@ButtonBehavior+Image>:
     allow_stretch: True
     keep_ratio: True
@@ -98,7 +100,7 @@ MyScreenManager:
         size_hint_y: 0.8
         font_size: 14
         input_filter: 'int'
-        on_text: app.root.add_item(root.itemname, int(self.text))
+        on_text: app.root.add_item(root.itemname, self.text)
 #     MenuDropDown:
 # <DropDownButton@Button>:
 #     size_hint_y: None
@@ -132,14 +134,11 @@ MyScreenManager:
 
 <MenuScreen>:
     name: 'menuscreen'
-    # Vegetarian: 'Vegetarian'
-    # Pepperoni: Pepperoni
-    # Cheesy_garlic: Cheesy Garlic
     BoxLayout:
         orientation: 'vertical'
         Header:
         GridLayout:
-            size_hint_y: 11
+            size_hint_y: 10
             cols: 3
             MenuWidget:
                 itemname: 'Pepperoni'
@@ -160,12 +159,61 @@ MyScreenManager:
                 itemname: 'Vegetarian'
                 itemsource: 'assets/vegetarian.png'
         Button:
+            size_hint_y: 1
             text: '>>>Go to checkout>>>'
             on_release: app.root.menu_to_checkout()
 
+<InfoBox@BoxLayout>:
+    orientation: 'vertical'
+    prompt: ''
+    do_text: None
+    ItemText:
+        text: root.prompt
+    TextInput:
+        font_size: 14
+        on_text: root.do_text
+
 <CheckoutScreen>:
     name: 'checkoutscreen'
+    order_info: order_info
     BoxLayout:
         orientation: 'vertical'
-        header: 
-        
+        Header:
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 11
+            BoxLayout:
+                orientation: 'vertical'
+                InfoBox:
+                    prompt: 'Please enter your name:'
+                InfoBox:
+                    prompt: 'Please enter your phone number:'
+                InfoBox:
+                    prompt: 'Please enter your address (if delivery):'
+                InfoBox:
+                    prompt: 'Anything else we need to know:'
+            BoxLayout:
+                orientation: 'vertical'
+                id: order_info
+
+# <CheckoutScreen>:
+#     name: 'checkoutscreen'
+#     order_info: order_info
+#     BoxLayout:
+#         orientation: 'vertical'
+#         Header:
+#         GridLayout:
+#             size_hint_y: 5.5
+#             cols: 2
+#             InfoBox:
+#                 prompt: 'Please enter your name:'
+#             InfoBox:
+#                 prompt: 'Please enter your phone number:'
+#             InfoBox:
+#                 prompt: 'Please enter your address (if delivery):'
+#             InfoBox:
+#                 prompt: 'Anything else we need to know:'
+#         GridLayout:
+#             rows: 3
+#             size_hint_y: 5.5
+#             id: order_info
