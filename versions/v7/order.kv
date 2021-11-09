@@ -23,7 +23,7 @@ MyScreenManager:
 <TextInput>:
     font_name: 'Consola'
     background_color: (0.98, 0.93, 0.93, 1)
-    foreground_color: '#000000'
+    foreground_color: '#cc3d0b'
 
 <Button>:
     # Style all buttons. Overwrite the style of Label.
@@ -66,12 +66,12 @@ MyScreenManager:
         font_size: 30
         halign: 'left'
     # Top right.
-    # HeaderButton:
-    #     text: 'Cart'
-    # HeaderButton:
-    #     text: 'Login'
-    # HeaderButton:
-    #     text: 'Signup'
+    HeaderButton:
+        text: 'Cart'
+    HeaderButton:
+        text: 'Login'
+    HeaderButton:
+        text: 'Signup'
 
 <ModeSelection@BoxLayout>:
     # The button and the image.
@@ -149,10 +149,6 @@ MyScreenManager:
     size_hint_y: 0.8
     font_size: 14
     multiline: False
-    on_focus: 
-        if self.text == 'Enter a number between 1 ~ 10.': self.text = ''
-        elif self.text == 'Please select at least one item.': self.text = ''
-        else: pass
 
 <MenuWidget@BoxLayout>:
     orientation: 'vertical'
@@ -209,10 +205,6 @@ MyScreenManager:
             destination: 'Checkout'
 
 <InfoInput@TextInput>:
-    on_focus: 
-        if self.text == 'This field is compulsory.': self.text = ''
-        elif self.text == 'A valid phone number is required.': self.text = ''
-        else: pass
 <InfoBox@BoxLayout>:
     orientation: 'vertical'
     prompt: ''

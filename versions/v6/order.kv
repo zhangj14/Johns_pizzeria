@@ -20,11 +20,6 @@ MyScreenManager:
     font_name: 'Comfortaa-VariableFont_wght'
     bold: True
 
-<TextInput>:
-    font_name: 'Consola'
-    background_color: (0.98, 0.93, 0.93, 1)
-    foreground_color: '#000000'
-
 <Button>:
     # Style all buttons. Overwrite the style of Label.
     background_normal: ''
@@ -66,12 +61,12 @@ MyScreenManager:
         font_size: 30
         halign: 'left'
     # Top right.
-    # HeaderButton:
-    #     text: 'Cart'
-    # HeaderButton:
-    #     text: 'Login'
-    # HeaderButton:
-    #     text: 'Signup'
+    HeaderButton:
+        text: 'Cart'
+    HeaderButton:
+        text: 'Login'
+    HeaderButton:
+        text: 'Signup'
 
 <ModeSelection@BoxLayout>:
     # The button and the image.
@@ -149,10 +144,6 @@ MyScreenManager:
     size_hint_y: 0.8
     font_size: 14
     multiline: False
-    on_focus: 
-        if self.text == 'Enter a number between 1 ~ 10.': self.text = ''
-        elif self.text == 'Please select at least one item.': self.text = ''
-        else: pass
 
 <MenuWidget@BoxLayout>:
     orientation: 'vertical'
@@ -208,25 +199,19 @@ MyScreenManager:
         FooterButton:
             destination: 'Checkout'
 
-<InfoInput@TextInput>:
-    on_focus: 
-        if self.text == 'This field is compulsory.': self.text = ''
-        elif self.text == 'A valid phone number is required.': self.text = ''
-        else: pass
 <InfoBox@BoxLayout>:
     orientation: 'vertical'
     prompt: ''
     multiline: False
     size_hint_y: 0.2
-    input: input
-    filter: None
+    do_text: None
     ItemText:
         text: root.prompt
-    InfoInput:
-        id: input
+    TextInput:
         multiline: root.multiline
-        font_size: 16
-        filter: root.filter
+        font_size: 14
+        input_filter: 'int'
+        on_text: root.do_text
 
 <CheckoutScreen>:
     name: 'checkoutscreen'
@@ -240,21 +225,15 @@ MyScreenManager:
             StackLayout:
                 orientation: 'tb-lr'
                 InfoBox:
-                    id: name
                     prompt: 'Please enter your name:'
                     multiline: False
-                    filter: 'str'
                 InfoBox:
-                    id: number
                     prompt: 'Please enter your phone number:'
                     multiline: False
-                    filter: 'int'
                 InfoBox:
-                    id: address
                     prompt: 'Please enter your address (if delivery):'
                     multiline: True
                 InfoBox:
-                    id: note
                     prompt: 'Anything else we need to know:'
                     multiline: True
             StackLayout:

@@ -53,61 +53,20 @@ class MenuInput(TextInput):
     def insert_text(self, substring, from_undo=False):
         try:
             int(substring)
-            if self.text == '' and substring != '0':
+            if self.text == '':
                 return super().insert_text(substring, from_undo=from_undo)
             elif int(self.text) > 1 or int(substring) > 0:
-                self.text = "Enter a number between 1 ~ 10."
+                self.text = "Please enter a number between 1 ~ 10."
             else:
                 return super().insert_text(substring, from_undo=from_undo)
         except ValueError:
             pass
-
 
 class MenuWidget(BoxLayout):
     pass
 
 
 class MenuScreen(Screen):
-    pass
-
-
-class InfoInput(TextInput):
-
-    def insert_text(self, substring, from_undo=False):
-        if (
-            ((len(self.text) == 0 
-            or self.text[-1] == ' '
-            or self.text[-1] == '\n')
-            and substring == ' ')
-            or ((len(self.text) == 0 
-            or self.text[-1] == '\n')
-            and substring == '\n')):
-            return
-        if self.filter == 'str':
-            try:
-                int(substring)
-            except ValueError:
-                if len(self.text) > 50:
-                    return
-                else:
-                    return super().insert_text(substring, from_undo=from_undo)
-        elif self.filter == 'int':
-            if len(self.text) > 13:
-                return
-            try:
-                return super().insert_text(str(int(substring)), from_undo=from_undo)
-            except ValueError:
-                return
-        elif self.filter == None:
-            if len(self.text) > 100:
-                return
-            else:
-                return super().insert_text(substring, from_undo=from_undo)
-
-
-class InfoBox(BoxLayout):
-    input = ObjectProperty(None)
-    filter = StringProperty(None)
     pass
 
 
@@ -161,16 +120,15 @@ class MyScreenManager(ScreenManager):
         calculate the total price including delivery fee,
         displays the price of individual items.
         '''
+        self.transition.direction = 'left'
+        self.current = 'checkoutscreen'
         total = 0
         for id, value in self.ids.menuscreen.ids.items():
-            # Get the actual text input.
             text = value.ids['quantity'].text
-            # Check for the value type again.
             try:
                 int(text)
             except:
                 continue
-            # If no text, pass.
             if text  == '':
                 continue
             else:
@@ -193,12 +151,7 @@ class MyScreenManager(ScreenManager):
                 # Add the line to the screen.
                 line.add_widget(item)
                 line.add_widget(price_l)
-                self.ids.checkoutscreen.ids.order_info.add_widget(line)
-        if total == 0:
-            text = 'Please select at least one item.'
-            self.ids.menuscreen.ids.pepperoni.ids.quantity.text = text
-            return
-
+                self.children[0].ids.order_info.add_widget(line)
 
         def mode_price(self):
             '''To return a price based on delivery preference.'''
@@ -222,7 +175,7 @@ class MyScreenManager(ScreenManager):
         )
         line.add_widget(item)
         line.add_widget(price_l)
-        self.ids.checkoutscreen.ids.order_info.add_widget(line)
+        self.children[0].ids.order_info.add_widget(line)
 
         # Line for total.
         line = BoxLayout(
@@ -234,50 +187,22 @@ class MyScreenManager(ScreenManager):
             halign='left',
         )
         price_l = CheckoutLabel(
-            text=f'${total + mode_price(self)}',
+            text=f'${total}',
             halign='right',
         )
         line.add_widget(item)
         line.add_widget(price_l)
-        self.ids.checkoutscreen.ids.order_info.add_widget(line)
-        self.transition.direction = 'left'
-        self.current = 'checkoutscreen'
+        self.children[0].ids.order_info.add_widget(line)
 
     def last_to_home(self, dt):
         '''
         Go from the thank you screen to homepage.
         Dt parameter for 5 seconds delay.
         '''
-        self.cancel()
+        self.transition.direction = 'right'
+        self.current = 'homescreen'
 
     def checkout_to_last(self):
-        '''
-        Go from the checkout page to the thank you page.
-        Then called the function 
-        to go from the last page to the first.
-        '''
-        name_field = self.ids.checkoutscreen.ids.name.ids.input
-        number_field = self.ids.checkoutscreen.ids.number.ids.input
-        address_field = self.ids.checkoutscreen.ids.address.ids.input
-        if name_field.text == '':
-            name_field.text = 'This field is compulsory.'
-            return
-        if number_field.text == '':
-            number_field.text = 'This field is compulsory.'
-            return
-        if len(number_field.text) < 7:
-            number_field.text = 'A valid phone number is required.'
-            return
-        if address_field.text == '' and self.mode == 'Delivery':
-            address_field.text = 'This field is compulsory.'
-            return
-        else:
-            try:
-                int(number_field.text)
-                pass
-            except:
-                number_field.text = 'This field is compulsory.'
-                return
         self.transition.direction = 'left'
         self.current = 'lastscreen'
         Clock.schedule_once(self.last_to_home, 5)
@@ -288,14 +213,7 @@ class MyScreenManager(ScreenManager):
         self.current = 'homescreen'
         self.mode = ''
         self.order = {}
-        for widget in self.ids.menuscreen.ids.values():
-            widget.ids.quantity.text = ''
         self.ids.checkoutscreen.ids.order_info.clear_widgets()
-        for widget in self.ids.checkoutscreen.ids.values():
-            try:
-                widget.input.text = ''
-            except AttributeError:
-                continue
 
 
 class OrderApp(App):

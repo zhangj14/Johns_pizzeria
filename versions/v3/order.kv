@@ -1,37 +1,21 @@
 #:kivy 2.0.0
 #: import StringProperty kivy.properties.StringProperty
-#: import ObjectProperty kivy.properties.StringProperty
-
-# Register all child screens to the screen manager.
 MyScreenManager:
     HomeScreen:
-        id: homescreen
     MenuScreen:
-        id: menuscreen
     CheckoutScreen:
-        id: checkoutscreen
-    LastScreen:
-        id: lastscreen
-
+    AccountScreen:
 
 <Label>:
-    # Style all labels.
     color: '#cc3d0b'
     font_name: 'Comfortaa-VariableFont_wght'
     bold: True
 
-<TextInput>:
-    font_name: 'Consola'
-    background_color: (0.98, 0.93, 0.93, 1)
-    foreground_color: '#000000'
-
 <Button>:
-    # Style all buttons. Overwrite the style of Label.
     background_normal: ''
     background_down: ''
     background_color: '#fbb448'
     font_name: 'Consola'
-    # Border.
     canvas.before:
         Color:
             rgba: 243/255, 103/255, 13/255, 1
@@ -40,7 +24,6 @@ MyScreenManager:
             rectangle: self.x, self.y, self.width, self.height
 
 <ImageButton@ButtonBehavior+Image>:
-    # The images that are used as buttons.
     allow_stretch: True
     keep_ratio: True
 
@@ -49,7 +32,6 @@ MyScreenManager:
     font_size: 18
 
 <Header@BoxLayout>:
-    # The border at the bottmom.
     canvas.before:
         Color:
             rgba: 243/255, 103/255, 13/255, 1
@@ -58,23 +40,20 @@ MyScreenManager:
             points: (self.x, self.y, self.x+self.width, self.y)
     orientation: 'horizontal'
     size_hint_y: 1
-    # Top left corner.
     Label:
         size_hint_x: 6.5
         text_size: self.size
         text: "John's Pizzeria"
         font_size: 30
         halign: 'left'
-    # Top right.
-    # HeaderButton:
-    #     text: 'Cart'
-    # HeaderButton:
-    #     text: 'Login'
-    # HeaderButton:
-    #     text: 'Signup'
+    HeaderButton:
+        text: 'Cart'
+    HeaderButton:
+        text: 'Login'
+    HeaderButton:
+        text: 'Signup'
 
 <ModeSelection@BoxLayout>:
-    # The button and the image.
     orientation: 'vertical'
     mode: ''
     source: None
@@ -83,17 +62,12 @@ MyScreenManager:
         text: root.mode
         font_size: 18
         on_release: app.root.home_to_menu(root.mode)
-    # Add padding manually.
-    Label:
-        size_hint_y: 0.5
     ImageButton:
         size_hint_y: 5
         allow_stretch: True
         keep_ratio: True
         source: root.source
         on_release: app.root.home_to_menu(root.mode)
-    Label:
-        size_hint_y: 0.5
 
 <HomeScreen>:
     name: 'homescreen'
@@ -127,33 +101,6 @@ MyScreenManager:
     allow_stretch: True
     keep_ratio: True
 
-<FooterButton@BoxLayout>:
-    orientation: 'horizontal'
-    size_hint_y: 1
-    destination: ''
-    Button:
-        size_hint_y: 1
-        text: '<<<Cancel order<<<'
-        on_release: app.root.cancel()
-    Button:
-        size_hint_y: 1
-        text: '>>>Go to %s>>>' % root.destination
-        on_release: 
-            if root.destination == 'Checkout': \
-            app.root.menu_to_checkout()
-            elif root.destination == 'Last Page': \
-            app.root.checkout_to_last()
-
-
-<MenuInput@TextInput>:
-    size_hint_y: 0.8
-    font_size: 14
-    multiline: False
-    on_focus: 
-        if self.text == 'Enter a number between 1 ~ 10.': self.text = ''
-        elif self.text == 'Please select at least one item.': self.text = ''
-        else: pass
-
 <MenuWidget@BoxLayout>:
     orientation: 'vertical'
     itemname: ''
@@ -167,66 +114,83 @@ MyScreenManager:
         allow_stretch: True
         keep_ratio: True
         source: root.itemsource
-    MenuInput:
-        id: quantity
+    TextInput:
+        id: root.itemname
+        size_hint_y: 0.8
+        font_size: 14
+        input_filter: 'int'
+        on_text: app.root.add_item(root.itemname, self.text)
+#     MenuDropDown:
+# <DropDownButton@Button>:
+#     size_hint_y: None
+#     height: 20
+#     font_size: 16
+#     on_release: app.root.add_item(self.itemname, self.text)
+# <MenuDropDown@DropDown>:
+#     size_hint_y: None
+#     DropDownButton:
+#         text: '1'
+#     DropDownButton:
+#         text: '2'
+#     DropDownButton:
+#         text: '3'
+#     DropDownButton:
+#         text: '4'
+#     DropDownButton:
+#         text: '5'
+#     DropDownButton:
+#         text: '6'
+#     DropDownButton:
+#         text: '7'
+#     DropDownButton:
+#         text: '8'
+#     DropDownButton:
+#         text: '9'
+#     DropDownButton:
+#         text: '10'
+#     DropDownButton:
+#         text: '1'
 
 <MenuScreen>:
     name: 'menuscreen'
     BoxLayout:
         orientation: 'vertical'
         Header:
-        Label:
-            size_hint_y: 1
-            text: 'Please enter the number of pizzas (1-10) you would like in the input fields.'
         GridLayout:
-            size_hint_y: 9
+            size_hint_y: 10
             cols: 3
             MenuWidget:
-                id: pepperoni
                 itemname: 'Pepperoni'
                 itemsource: 'assets/pepperoni.png'
             MenuWidget:
-                id: cheesygarlic
                 itemname: 'Cheesy Garlic'
                 itemsource: 'assets/cheesygarlic.png'
             MenuWidget:
-                id: mushroom
                 itemname: 'Mushroom'
                 itemsource: 'assets/mushroom.png'
             MenuWidget:
-                id: beeftomato
                 itemname: 'Beef and Tomato'
                 itemsource: 'assets/beeftomato.png'
             MenuWidget:
-                id: supreme
                 itemname: 'Supreme'
                 itemsource: 'assets/supreme.png'
             MenuWidget:
-                id: vegetarian
                 itemname: 'Vegetarian'
                 itemsource: 'assets/vegetarian.png'
-        FooterButton:
-            destination: 'Checkout'
+        Button:
+            size_hint_y: 1
+            text: '>>>Go to checkout>>>'
+            on_release: app.root.menu_to_checkout()
 
-<InfoInput@TextInput>:
-    on_focus: 
-        if self.text == 'This field is compulsory.': self.text = ''
-        elif self.text == 'A valid phone number is required.': self.text = ''
-        else: pass
 <InfoBox@BoxLayout>:
     orientation: 'vertical'
     prompt: ''
-    multiline: False
-    size_hint_y: 0.2
-    input: input
-    filter: None
+    do_text: None
     ItemText:
         text: root.prompt
-    InfoInput:
-        id: input
-        multiline: root.multiline
-        font_size: 16
-        filter: root.filter
+    TextInput:
+        font_size: 14
+        on_text: root.do_text
 
 <CheckoutScreen>:
     name: 'checkoutscreen'
@@ -236,41 +200,39 @@ MyScreenManager:
         Header:
         BoxLayout:
             orientation: 'horizontal'
-            size_hint_y: 10
-            StackLayout:
-                orientation: 'tb-lr'
+            size_hint_y: 11
+            BoxLayout:
+                orientation: 'vertical'
                 InfoBox:
-                    id: name
                     prompt: 'Please enter your name:'
-                    multiline: False
-                    filter: 'str'
                 InfoBox:
-                    id: number
                     prompt: 'Please enter your phone number:'
-                    multiline: False
-                    filter: 'int'
                 InfoBox:
-                    id: address
                     prompt: 'Please enter your address (if delivery):'
-                    multiline: True
                 InfoBox:
-                    id: note
                     prompt: 'Anything else we need to know:'
-                    multiline: True
-            StackLayout:
-                orientation: 'tb-lr'
+            BoxLayout:
+                orientation: 'vertical'
                 id: order_info
-        FooterButton:
-            destination: 'Last Page'
 
-<LastScreen>:
-    name: 'lastscreen'
-    BoxLayout:
-        orientation: 'vertical'
-        Label:
-            text: 'Thank you'
-            font_size: 40
-            centre: root.center
-        Label:
-            text: 'Automatically redirect to homepage in 5 seconds.'
-            font_size: 20
+# <CheckoutScreen>:
+#     name: 'checkoutscreen'
+#     order_info: order_info
+#     BoxLayout:
+#         orientation: 'vertical'
+#         Header:
+#         GridLayout:
+#             size_hint_y: 5.5
+#             cols: 2
+#             InfoBox:
+#                 prompt: 'Please enter your name:'
+#             InfoBox:
+#                 prompt: 'Please enter your phone number:'
+#             InfoBox:
+#                 prompt: 'Please enter your address (if delivery):'
+#             InfoBox:
+#                 prompt: 'Anything else we need to know:'
+#         GridLayout:
+#             rows: 3
+#             size_hint_y: 5.5
+#             id: order_info
