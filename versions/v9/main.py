@@ -436,22 +436,18 @@ class MyScreenManager(ScreenManager):
         # in the respective input fields.
         name_l = CheckoutLabel(
             text=f'Order Name: {name.text}',
-            size_hint_y=0.1,
             halign='left'
         )
         number_l = CheckoutLabel(
             text=f'Phone Number: {number.text}',
-            size_hint_y=0.1,
             halign='left'
         )
         address_l = CheckoutLabel(
             text=f'Delivery Address: {address.text}',
-            size_hint_y=0.1,
             halign='left'
         )
         note_l = CheckoutLabel(
             text=f'Note: {note.text}',
-            size_hint_y=0.1,
             halign='left'
         )
         # Add the information labels in.
@@ -510,6 +506,9 @@ class OrderApp(App):
     root_widget = Builder.load_file('versions/v9/order.kv')
 
     def build(self):
+        # Set the minumum size.
+        Window.minimum_width, Window.minimum_height = Window.size
+        # Set the background colour.
         Window.clearcolor = (0.98, 0.93, 0.93, 1)
         return self.root_widget
 

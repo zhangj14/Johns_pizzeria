@@ -214,7 +214,9 @@ MyScreenManager:
 
 
 <CheckoutLabel@Label>:
-    text_size: self.size
+    text_size: root.width, None
+    size: self.texture_size
+    padding: (10, 10)
 
 
 # Containing prompt and an input field.
@@ -295,8 +297,11 @@ MyScreenManager:
             orientation: 'horizontal'
             size_hint_y: 10
             # A column for displaying info.
-            StackLayout:
+            BoxLayout:
+                orientation: 'vertical'
                 id: infobox
+                padding: 10
+                size_hint_x: 1
             # A column for order information.
             StackLayout:
                 padding: 10
