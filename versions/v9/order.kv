@@ -1,6 +1,7 @@
 #:kivy 2.0.0
-#: import StringProperty kivy.properties.StringProperty
-#: import ObjectProperty kivy.properties.StringProperty
+#:import StringProperty kivy.properties.StringProperty
+#:import ObjectProperty kivy.properties.ObjectProperty
+
 
 # Register all child screens to the screen manager.
 MyScreenManager:
@@ -56,7 +57,7 @@ MyScreenManager:
 
 
 # Header for all pages.
-<Header@BoxLayout>:
+<Header@Lebel>:
     # The border at the bottom.
     canvas.before:
         Color:
@@ -66,17 +67,14 @@ MyScreenManager:
             points: (self.x, self.y, self.x+self.width, self.y)
     orientation: 'horizontal'
     size_hint_y: 1
-    # Top left corner, logo.
-    Label:
-        size_hint_x: 6.5
-        text_size: self.size
-        text: "John's Pizzeria"
-        font_size: 30
-        halign: 'left'
+    text_size: self.size
+    text: "John's Pizzeria"
+    font_size: 30
+    halign: 'left'
 
 
 # Footers in all pages.
-<FooterButton@BoxLayout>:
+<Footer@BoxLayout>:
     orientation: 'horizontal'
     size_hint_y: 1
     destination: ''
@@ -100,7 +98,7 @@ MyScreenManager:
 <ModeSelection@BoxLayout>:
     orientation: 'vertical'
     mode: ''
-    source: None
+    source: ''
     Button:
         text: root.mode
         on_release: app.root.home_to_menu(root.mode)
@@ -123,6 +121,7 @@ MyScreenManager:
     name: 'homescreen'
     BoxLayout:
         orientation: 'vertical'
+        padding: 10
         Header:
         # The banner image in the center.
         Image:
@@ -138,10 +137,10 @@ MyScreenManager:
             size_hint_y: 6
             ModeSelection:
                 mode: 'Delivery'
-                source: 'assets/Delivery.png'
+                source: './assets/Delivery.png'
             ModeSelection:
                 mode: 'Pickup'
-                source: 'assets/Pickup.png'
+                source: './assets/Pickup.png'
 
 
 # Input field in menupage.
@@ -155,7 +154,7 @@ MyScreenManager:
 <MenuWidget@BoxLayout>:
     orientation: 'vertical'
     itemname: ''
-    itemsource: None
+    itemsource: ''
     Label:
         size_hint_y: 1
         font_size: 16
@@ -174,6 +173,7 @@ MyScreenManager:
     name: 'menuscreen'
     BoxLayout:
         orientation: 'vertical'
+        padding: 10
         Header:
         Label:
             size_hint_y: 1
@@ -205,7 +205,7 @@ MyScreenManager:
                 id: vegetarian
                 itemname: 'Vegetarian'
                 itemsource: 'assets/vegetarian.png'
-        FooterButton:
+        Footer:
             destination: 'Checkout'
 
 
@@ -214,6 +214,7 @@ MyScreenManager:
 
 
 <CheckoutLabel@Label>:
+    text_size: self.size
 
 
 # Containing prompt and an input field.
@@ -228,7 +229,7 @@ MyScreenManager:
         text: root.prompt
     InfoInput:
         id: input
-        multiline: root.prompt
+        multiline: root.multiline
         font_size: 16
         filter: root.filter
 
@@ -236,6 +237,7 @@ MyScreenManager:
 <InfoBoxes@StackLayout>:
     orientation: 'tb-lr'
     size_hint_x: 1
+    padding: 10
     InfoBox:
         id: name
         prompt: 'Please enter your name:'
@@ -261,6 +263,7 @@ MyScreenManager:
     name: 'checkoutscreen'
     order_info: order_info
     BoxLayout:
+        padding: 10
         orientation: 'vertical'
         Header:
         BoxLayout:
@@ -271,18 +274,43 @@ MyScreenManager:
                 id: infobox
             # A column for order information.
             StackLayout:
+                padding: 10
                 orientation: 'tb-lr'
                 size_hint_x: 1
                 id: order_info
-        FooterButton:
+        Footer:
             id: footer
             destination: 'View your order'
 
+
+# The checkout page.
+<ConfirmScreen>:
+    name: 'confirmscreen'
+    order_info: order_info
+    BoxLayout:
+        padding: 10
+        orientation: 'vertical'
+        Header:
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 10
+            # A column for displaying info.
+            StackLayout:
+                id: infobox
+            # A column for order information.
+            StackLayout:
+                padding: 10
+                orientation: 'tb-lr'
+                size_hint_x: 1
+                id: order_info
+        Footer:
+            destination: 'Confirm'
 
 # Last thankyou page.
 <LastScreen>:
     name: 'lastscreen'
     BoxLayout:
+        padding: 10
         orientation: 'vertical'
         Label:
             text: 'Thank you'

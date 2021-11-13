@@ -166,6 +166,10 @@ class InfoBox(BoxLayout):
     input = ObjectProperty(None)
     filter = StringProperty(None)
     prompt = StringProperty('')
+    # def __init__(self, prompt=str(prompt),filter=str(filter), **kwargs):
+    #     super().__init__(**kwargs)
+    #     self.add_widget(Label(text=prompt))
+    #     self.add_widget(InfoInput(filter=filter))
     pass
 
 
@@ -234,7 +238,7 @@ class MyScreenManager(ScreenManager):
                 return 0.00
 
         if self.mode == 'Pickup':
-            input = checkout.ids.infobox.ids.address
+            input = checkout.ids.infobox
             input.disabled = True
             input.text = 'N/A'
 
@@ -404,26 +408,26 @@ class MyScreenManager(ScreenManager):
         for widget in menu.ids.values():
             widget.ids.quantity.text = ''
         checkout.ids.order_info.clear_widgets()
-        checkout.ids.order_info.add_widget(
-            InfoBox(id='name',
-            prompt='Please enter your name',
-            multiline=False,
-            filter='str'))
-        checkout.ids.order_info.add_widget(
-            InfoBox(id='number',
-            prompt='Please enter your phone nmuber',
-            multiline=False,
-            filter='int'))
-        checkout.ids.order_info.add_widget(
-            InfoBox(id='address',
-            prompt='Please enter your address',
-            multiline=True,
-            filter=None))
-        checkout.ids.order_info.add_widget(
-            InfoBox(id='note',
-            prompt='Anything else we need to know',
-            multiline=True,
-            filter=None))
+        # checkout.ids.order_info.add_widget(
+        #     InfoBox(id='name',
+        #     prompt='Please enter your name',
+        #     multiline=False,
+        #     filter='str'))
+        # checkout.ids.order_info.add_widget(
+        #     InfoBox(id='number',
+        #     prompt='Please enter your phone nmuber',
+        #     multiline=False,
+        #     filter='int'))
+        # checkout.ids.order_info.add_widget(
+        #     InfoBox(id='address',
+        #     prompt='Please enter your address',
+        #     multiline=True,
+        #     filter=None))
+        # checkout.ids.order_info.add_widget(
+        #     InfoBox(id='note',
+        #     prompt='Anything else we need to know',
+        #     multiline=True,
+        #     filter=None))
         for widget in checkout.ids.values():
             try:
                 widget.input.text = ''

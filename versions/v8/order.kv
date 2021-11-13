@@ -16,26 +16,19 @@ MyScreenManager:
         id: lastscreen
 
 
-# Style all labels
 <Label>:
+    # Style all labels.
     color: '#cc3d0b'
     font_name: 'Comfortaa-VariableFont_wght'
-    font_size: 16
     bold: True
 
-
-# Style all text inputs
 <TextInput>:
     font_name: 'Consola'
-    font_size: 18
     background_color: (0.98, 0.93, 0.93, 1)
     foreground_color: '#000000'
 
-
-# Style all buttons. Overwrite the style of Label.
 <Button>:
-    size_hint_y: 1
-    font_size: 18
+    # Style all buttons. Overwrite the style of Label.
     background_normal: ''
     background_down: ''
     background_color: '#fbb448'
@@ -48,16 +41,17 @@ MyScreenManager:
             width: 2
             rectangle: self.x, self.y, self.width, self.height
 
-
-# The images that are used as buttons in the homepage.
 <ImageButton@ButtonBehavior+Image>:
+    # The images that are used as buttons.
     allow_stretch: True
     keep_ratio: True
 
+<HeaderButton@Button>:
+    size_hint_x: 1
+    font_size: 18
 
-# Header for all pages.
 <Header@BoxLayout>:
-    # The border at the bottom.
+    # The border at the bottmom.
     canvas.before:
         Color:
             rgba: 243/255, 103/255, 13/255, 1
@@ -66,48 +60,34 @@ MyScreenManager:
             points: (self.x, self.y, self.x+self.width, self.y)
     orientation: 'horizontal'
     size_hint_y: 1
-    # Top left corner, logo.
+    # Top left corner.
     Label:
         size_hint_x: 6.5
         text_size: self.size
         text: "John's Pizzeria"
         font_size: 30
         halign: 'left'
+    # Top right.
+    # HeaderButton:
+    #     text: 'Cart'
+    # HeaderButton:
+    #     text: 'Login'
+    # HeaderButton:
+    #     text: 'Signup'
 
-
-# Footers in all pages.
-<FooterButton@BoxLayout>:
-    orientation: 'horizontal'
-    size_hint_y: 1
-    destination: ''
-    # Same button for all pages.
-    Button:
-        text: '<<<Cancel order<<<'
-        on_release: app.root.cancel()
-    # Button based on the current page.
-    Button:
-        text: '>>>%s>>>' % root.destination
-        on_release: 
-            if root.destination == 'Checkout': \
-            app.root.menu_to_checkout()
-            elif root.destination == 'View your order': \
-            app.root.checkout_to_confirm()
-            elif root.destination == 'Confirm': \
-            app.root.confirm()
-
-
-# The modeselection area of homepage.
 <ModeSelection@BoxLayout>:
+    # The button and the image.
     orientation: 'vertical'
     mode: ''
     source: None
     Button:
+        size_hint_y: 1
         text: root.mode
+        font_size: 18
         on_release: app.root.home_to_menu(root.mode)
     # Add padding manually.
     Label:
         size_hint_y: 0.5
-    # The images that are used as buttons
     ImageButton:
         size_hint_y: 5
         allow_stretch: True
@@ -117,14 +97,11 @@ MyScreenManager:
     Label:
         size_hint_y: 0.5
 
-
-# The homepage.
 <HomeScreen>:
     name: 'homescreen'
     BoxLayout:
         orientation: 'vertical'
         Header:
-        # The banner image in the center.
         Image:
             size_hint_y: 5
             allow_stretch: True
@@ -132,7 +109,7 @@ MyScreenManager:
             source: 'assets/home_1_croped.png'
         Label:
             text: 'Start ordering by choosing one of the following'
-        # Mode selection area.
+            font_size: 18
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: 6
@@ -143,15 +120,44 @@ MyScreenManager:
                 mode: 'Pickup'
                 source: 'assets/Pickup.png'
 
+<ItemText@Label>:
+    size_hint_x: 1
+    font_size: 16
 
-# Input field in menupage.
+<ItemImage@Image>:
+    size_hint_x: 5
+    allow_stretch: True
+    keep_ratio: True
+
+<FooterButton@BoxLayout>:
+    orientation: 'horizontal'
+    size_hint_y: 1
+    destination: ''
+    Button:
+        size_hint_y: 1
+        text: '<<<Cancel order<<<'
+        on_release: app.root.cancel()
+    Button:
+        size_hint_y: 1
+        text: '>>>%s>>>' % root.destination
+        on_release: 
+            if root.destination == 'Checkout': \
+            app.root.menu_to_checkout()
+            elif root.destination == 'View your order': \
+            app.root.checkout_to_confirm()
+            elif root.destination == 'Confirm': \
+            app.root.confirm()
+
+
 <MenuInput@TextInput>:
     size_hint_y: 0.8
     font_size: 14
     multiline: False
+    on_focus: 
+        if self.text == 'Enter a number between 1 ~ 10.': self.text = ''
+        elif self.text == 'Please select at least one item.': self.text = ''
+        else: pass
 
-
-# Containing itemname, image and the input field.
 <MenuWidget@BoxLayout>:
     orientation: 'vertical'
     itemname: ''
@@ -168,8 +174,6 @@ MyScreenManager:
     MenuInput:
         id: quantity
 
-
-# The menupage.
 <MenuScreen>:
     name: 'menuscreen'
     BoxLayout:
@@ -208,15 +212,11 @@ MyScreenManager:
         FooterButton:
             destination: 'Checkout'
 
-
-# Inputfield for personal information in the checkout.
 <InfoInput@TextInput>:
-
-
-<CheckoutLabel@Label>:
-
-
-# Containing prompt and an input field.
+    on_focus: 
+        if self.text == 'This field is compulsory.': self.text = ''
+        elif self.text == 'A valid phone number is required.': self.text = ''
+        else: pass
 <InfoBox@BoxLayout>:
     orientation: 'vertical'
     prompt: ''
@@ -224,39 +224,14 @@ MyScreenManager:
     size_hint_y: 0.2
     input: input
     filter: None
-    Label:
+    ItemText:
         text: root.prompt
     InfoInput:
         id: input
-        multiline: root.prompt
+        multiline: root.multiline
         font_size: 16
         filter: root.filter
 
-
-<InfoBoxes@StackLayout>:
-    orientation: 'tb-lr'
-    size_hint_x: 1
-    InfoBox:
-        id: name
-        prompt: 'Please enter your name:'
-        multiline: False
-        filter: 'str'
-    InfoBox:
-        id: number
-        prompt: 'Please enter your phone number:'
-        multiline: False
-        filter: 'int'
-    InfoBox:
-        id: address
-        prompt: 'Please enter your address (if delivery):'
-        multiline: True
-    InfoBox:
-        id: note
-        prompt: 'Anything else we need to know:'
-        multiline: True
-
-
-# The checkout page.
 <CheckoutScreen>:
     name: 'checkoutscreen'
     order_info: order_info
@@ -266,10 +241,28 @@ MyScreenManager:
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: 10
-            # A column for information boxes.
-            InfoBoxes:
+            StackLayout:
                 id: infobox
-            # A column for order information.
+                orientation: 'tb-lr'
+                size_hint_x: 1
+                InfoBox:
+                    id: name
+                    prompt: 'Please enter your name:'
+                    multiline: False
+                    filter: 'str'
+                InfoBox:
+                    id: number
+                    prompt: 'Please enter your phone number:'
+                    multiline: False
+                    filter: 'int'
+                InfoBox:
+                    id: address
+                    prompt: 'Please enter your address (if delivery):'
+                    multiline: True
+                InfoBox:
+                    id: note
+                    prompt: 'Anything else we need to know:'
+                    multiline: True
             StackLayout:
                 orientation: 'tb-lr'
                 size_hint_x: 1
@@ -279,7 +272,6 @@ MyScreenManager:
             destination: 'View your order'
 
 
-# Last thankyou page.
 <LastScreen>:
     name: 'lastscreen'
     BoxLayout:
