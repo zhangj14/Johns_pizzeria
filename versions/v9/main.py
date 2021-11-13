@@ -150,7 +150,7 @@ class InfoInput(TextInput):
                 or self.text[-1] == ' '
                 or self.text[-1] == '\n')
                 and substring == ' ')
-            or 
+            or
             ((len(self.text) == 0
                 or self.text[-1] == '\n')
                 and substring == '\n')):
