@@ -15,6 +15,341 @@ from kivy.properties import StringProperty, ObjectProperty
 import re
 
 
+style_string = '''
+#:kivy 2.0.0
+#:import StringProperty kivy.properties.StringProperty
+#:import ObjectProperty kivy.properties.ObjectProperty
+
+
+# Register all child screens to the screen manager.
+MyScreenManager:
+    HomeScreen:
+        id: homescreen
+    MenuScreen:
+        id: menuscreen
+    CheckoutScreen:
+        id: checkoutscreen
+    ConfirmScreen:
+        id: confirmscreen
+    LastScreen:
+        id: lastscreen
+
+
+# Style all labels
+<Label>:
+    color: '#cc3d0b'
+    font_name: 'comic'
+    font_size: 16
+    bold: True
+
+
+# Style all text inputs
+<TextInput>:
+    font_name: 'Consola'
+    font_size: 18
+    background_color: (0.98, 0.93, 0.93, 1)
+    foreground_color: '#000000'
+
+
+# Style all buttons. Overwrite the style of Label.
+<Button>:
+    size_hint_y: 1
+    font_size: 18
+    background_normal: ''
+    background_down: ''
+    background_color: '#fbb448'
+    font_name: 'Consola'
+    # Border.
+    canvas.before:
+        Color:
+            rgba: 243/255, 103/255, 13/255, 1
+        Line:
+            width: 2
+            rectangle: self.x, self.y, self.width, self.height
+
+
+# The images that are used as buttons in the homepage.
+<ImageButton@ButtonBehavior+Image>:
+    allow_stretch: True
+    keep_ratio: True
+
+
+# Header for all pages.
+<Header@Lebel>:
+    # The border at the bottom.
+    canvas.before:
+        Color:
+            rgba: 243/255, 103/255, 13/255, 1
+        Line:
+            width: 1
+            points: (self.x, self.y, self.x+self.width, self.y)
+    orientation: 'horizontal'
+    size_hint_y: 1
+    text_size: self.size
+    text: "John's Pizzeria"
+    font_size: 30
+    halign: 'left'
+
+
+# Footers in all pages.
+<Footer@BoxLayout>:
+    orientation: 'horizontal'
+    size_hint_y: 1
+    destination: ''
+    # Same button for all pages.
+    Button:
+        text: '<<<Cancel order<<<'
+        on_release: app.root.cancel()
+    # Button based on the current page.
+    Button:
+        text: '>>>%s>>>' % root.destination
+        on_release:
+            if root.destination == 'Checkout': \
+            app.root.menu_to_checkout()
+            elif root.destination == 'View your order': \
+            app.root.checkout_to_confirm()
+            elif root.destination == 'Confirm': \
+            app.root.confirm()
+
+
+# The modeselection area of homepage.
+<ModeSelection@BoxLayout>:
+    orientation: 'vertical'
+    mode: ''
+    source: ''
+    Button:
+        text: root.mode
+        on_release: app.root.home_to_menu(root.mode)
+    # Add padding manually.
+    Label:
+        size_hint_y: 0.5
+    # The images that are used as buttons
+    ImageButton:
+        size_hint_y: 5
+        allow_stretch: True
+        keep_ratio: True
+        source: root.source
+        on_release: app.root.home_to_menu(root.mode)
+    Label:
+        size_hint_y: 0.5
+
+
+# The homepage.
+<HomeScreen>:
+    name: 'homescreen'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        Header:
+        # The banner image in the center.
+        Image:
+            size_hint_y: 5
+            allow_stretch: True
+            keep_ratio: False
+            source: 'assets/home_1_croped.png'
+        Label:
+            text: 'Start ordering by choosing one of the following'
+        Label:
+            text: 'Delivery fee is $3.00'
+        # Mode selection area.
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 6
+            ModeSelection:
+                mode: 'Delivery'
+                source: './assets/Delivery.png'
+            ModeSelection:
+                mode: 'Pickup'
+                source: './assets/Pickup.png'
+
+
+# Input field in menupage.
+<MenuInput@TextInput>:
+    size_hint_y: 0.8
+    font_size: 14
+    multiline: False
+
+
+# Containing itemname, image and the input field.
+<MenuWidget@BoxLayout>:
+    orientation: 'vertical'
+    itemname: ''
+    itemsource: ''
+    Label:
+        size_hint_y: 1
+        font_size: 16
+        text: root.itemname
+    Image:
+        size_hint_y: 5
+        allow_stretch: True
+        keep_ratio: True
+        source: root.itemsource
+    MenuInput:
+        id: quantity
+
+
+# The menupage.
+<MenuScreen>:
+    name: 'menuscreen'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        Header:
+        Label:
+            size_hint_y: 1
+            text: 'Please enter the number of pizzas (1-10).'
+        # Main body containing Menuwidgets.
+        GridLayout:
+            size_hint_y: 9
+            cols: 3
+            MenuWidget:
+                id: pepperoni
+                itemname: 'Pepperoni'
+                itemsource: 'assets/pepperoni.png'
+            MenuWidget:
+                id: cheesygarlic
+                itemname: 'Cheesy Garlic'
+                itemsource: 'assets/cheesygarlic.png'
+            MenuWidget:
+                id: mushroom
+                itemname: 'Mushroom'
+                itemsource: 'assets/mushroom.png'
+            MenuWidget:
+                id: beeftomato
+                itemname: 'Beef and Tomato'
+                itemsource: 'assets/beeftomato.png'
+            MenuWidget:
+                id: supreme
+                itemname: 'Supreme'
+                itemsource: 'assets/supreme.png'
+            MenuWidget:
+                id: vegetarian
+                itemname: 'Vegetarian'
+                itemsource: 'assets/vegetarian.png'
+        Footer:
+            destination: 'Checkout'
+
+
+# Inputfield for personal information in the checkout.
+<InfoInput@TextInput>:
+
+
+# Auto-resizing label used in the Checkout page.
+<CheckoutLabel@Label>:
+    text_size: root.width, None
+    size: self.texture_size
+    padding: (10, 10)
+
+
+# Containing prompt and an input field.
+<InfoBox@BoxLayout>:
+    orientation: 'vertical'
+    prompt: ''
+    multiline: False
+    size_hint_y: 0.2
+    input: input
+    filter: None
+    Label:
+        text: root.prompt
+    InfoInput:
+        id: input
+        multiline: root.multiline
+        font_size: 16
+        filter: root.filter
+
+
+# Left column of the Checkout page.
+<InfoBoxes@StackLayout>:
+    orientation: 'tb-lr'
+    size_hint_x: 1
+    padding: 10
+    InfoBox:
+        id: name
+        prompt: 'Please enter your name:'
+        multiline: False
+        filter: 'str'
+    InfoBox:
+        id: number
+        prompt: 'Please enter your phone number:'
+        multiline: False
+        filter: 'int'
+    InfoBox:
+        id: address
+        prompt: 'Please enter your address (if delivery):'
+        multiline: True
+    InfoBox:
+        id: note
+        prompt: 'Anything else we need to know:'
+        multiline: True
+
+
+# The checkout page.
+<CheckoutScreen>:
+    name: 'checkoutscreen'
+    order_info: order_info
+    BoxLayout:
+        padding: 10
+        orientation: 'vertical'
+        Header:
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 10
+            # A column for information boxes.
+            InfoBoxes:
+                id: infobox
+            # A column for order information.
+            StackLayout:
+                padding: 10
+                orientation: 'tb-lr'
+                size_hint_x: 1
+                id: order_info
+        Footer:
+            id: footer
+            destination: 'View your order'
+
+
+# The checkout page.
+<ConfirmScreen>:
+    name: 'confirmscreen'
+    order_info: order_info
+    BoxLayout:
+        padding: 10
+        orientation: 'vertical'
+        Header:
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 10
+            # A column for displaying info.
+            BoxLayout:
+                orientation: 'vertical'
+                id: infobox
+                padding: 10
+                size_hint_x: 1
+            # A column for order information.
+            StackLayout:
+                padding: 10
+                orientation: 'tb-lr'
+                size_hint_x: 1
+                id: order_info
+        Footer:
+            destination: 'Confirm'
+
+# Last thankyou page.
+<LastScreen>:
+    name: 'lastscreen'
+    BoxLayout:
+        padding: 10
+        orientation: 'vertical'
+        Label:
+            text: 'Thank you'
+            font_size: 40
+            centre: root.center
+        Label:
+            text: 'Automatically redirect to homepage in 5 seconds.'
+            font_size: 20
+'''
+
+
 class ImageButton(ButtonBehavior, Image):
     '''
     Homepage.
@@ -88,7 +423,8 @@ class MenuInput(TextInput):
     def _on_focus(self, instance, value, *largs):
         '''
         Overwrite the on_focus method.
-        Remove all text when the user focus / unfocus the input fields.
+        Remove all text when the user focus /
+        unfocus the input fields.
         '''
         try:
             int(self.text)
@@ -121,6 +457,7 @@ class InfoInput(TextInput):
     Input field for personal info.
     '''
     filter = StringProperty(None)
+    # Special characters.
     if filter == 'str':
         special = '!@#$%^&*()_+}{|":?><~`=[];\',./\\'
     else:
@@ -170,7 +507,8 @@ class InfoInput(TextInput):
                     return super().insert_text(substring.capitalize(),
                                                from_undo=from_undo)
                 else:
-                    return super().insert_text(substring, from_undo=from_undo)
+                    return super().insert_text(substring,
+                                               from_undo=from_undo)
         # Phone number field.
         elif self.filter == 'int':
             # Less than 13 digits.
@@ -184,11 +522,12 @@ class InfoInput(TextInput):
                 return
         # Address and notes.
         elif self.filter is None:
-            # Less than 150 characters.
+            # Less than 100 characters.
             if len(self.text) > 100:
                 return
             else:
-                return super().insert_text(substring, from_undo=from_undo)
+                return super().insert_text(substring,
+                                           from_undo=from_undo)
 
 
 class InfoBox(BoxLayout):
@@ -313,7 +652,7 @@ class MyScreenManager(ScreenManager):
                 continue
             else:
                 # Round it to 2 d.p. following convention.
-                price = round(int(text) * self.menu[id][0], 2)
+                price = round(int(text) * self.menu[id][0], 3)
                 # Add price to total.
                 total += price
                 line = BoxLayout(
@@ -503,7 +842,7 @@ class OrderApp(App):
     App object.
     Entry point for this program
     '''
-    root_widget = Builder.load_file('versions/v9/order.kv')
+    root_widget = Builder.load_string(style_string)
 
     def build(self):
         # Set the minumum size.
