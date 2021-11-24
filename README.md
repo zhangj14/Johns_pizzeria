@@ -2,6 +2,7 @@
 
 Instructions for running the program.
 
+1. Download the code using the green button in the top-right corner.
 1. Use cmd to open the project directory.
 2. Create a virtual environment using the command `python -m venv venv`.
 3. Activate the virtual environment using the command `venv\Scripts\activate`.
